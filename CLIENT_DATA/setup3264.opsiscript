@@ -1,0 +1,62 @@
+[Actions]
+include_insert "common.opsiinc"
+
+comment "Show product picture"
+ShowBitmap "%ScriptPath%\" + "gams" + ".png" $ProductName$
+
+if not(HasMinimumSpace ("%SystemDrive%", $MinimumSpace$))
+   LogError "Es ist nicht genügend Speicherplatz auf der Lokalen Festplatte verfügbar! Es werden $MinimumSpace$ MB benötigt" + $ProductId$
+   isFatalError "Nicht ausreichend Speicherplatz"
+else
+	if FileExists("%ScriptPath%\delsub3264.opsiscript")
+		comment "Start uninstall sub section"
+		Sub "%ScriptPath%\delsub3264.opsiscript"
+	endif
+
+	if (not($WindowsNTVersion$ = "10.0"))
+		LogWarning "Only tested with Windows 10 (x86 and x64)"
+	endif
+
+	if ($INST_SystemType$ = "x86 System")
+		Message "Installing " + $ProductId$ + " 32 Bit..."
+		comment "Start setup program"
+		ChangeDirectory "%SCRIPTPATH%"
+		Winbatch_install_32
+		Sub_check_exitcode
+	endif
+
+	if ($INST_SystemType$ = "64 Bit System")
+		Message "Installing " + $ProductId$ + " 64 Bit..."
+		comment "Start setup program"
+		ChangeDirectory "%SCRIPTPATH%"
+		Winbatch_install_64
+		Sub_check_exitcode
+	endif
+
+	comment "include custom post install file"
+	set $CustomPostInstall$ = GetProductProperty("custom-post-install","none")
+	if not ($CustomPostInstall$ = "none")
+		if FileExists("%SCRIPTPATH%\custom\" + $CustomPostInstall$)
+			sub "%SCRIPTPATH%\custom\" + $CustomPostInstall$
+		endif
+	endif
+
+	if GetProductProperty("desktopicon", "true") = "true"
+		LinkFolder_create_icon
+	endif
+endif
+
+
+[Winbatch_install_32]
+$Installer32$ /sp- /silent /norestart /nocancel /SUPPRESSMSGBOXES
+
+[Winbatch_install_64]
+$Installer64$ /sp- /silent /norestart /nocancel /SUPPRESSMSGBOXES
+
+[LinkFolder_create_icon]
+set_basefolder common_desktopdirectory
+set_subfolder .
+set_link
+ 	name: $ProductName$
+ 	target: $PathToExe$
+end_link

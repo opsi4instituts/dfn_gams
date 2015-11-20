@@ -1,0 +1,45 @@
+if FileExists($PathToExe$)
+	if ($INST_SystemType$ = "x86 System")
+		Message "Uninstalling " + $ProductId$ + " 32 Bit..."
+		comment "Start setup program"
+		ChangeDirectory "%SCRIPTPATH%"
+		Winbatch_uninstall_32
+		LinkFolder_delete_icon
+		Sub_check_exitcode
+	endif
+
+	if ($INST_SystemType$ = "64 Bit System")
+		Message "Uninstalling " + $ProductId$ + " 64 Bit..."
+		comment "Start setup program"
+		ChangeDirectory "%SCRIPTPATH%"
+		Winbatch_uninstall_64
+		LinkFolder_delete_icon
+		Sub_check_exitcode
+	endif
+endif
+
+if FileExists("%SystemDrive%\GAMS")
+	Files_delete
+endif
+
+comment "include custom post uninstall file"
+set $CustomPostUninstall$ = GetProductProperty("custom-post-uninstall","none")
+if not ($CustomPostUninstall$ = "none")
+	if FileExists("%ScriptPath%\custom\" + $CustomPostUninstall$)
+		sub "%ScriptPath%\custom\" + $CustomPostUninstall$
+	endif
+endif
+
+[Winbatch_uninstall_32]
+$UninstallProgram$ /sp- /silent /norestart /nocancel /SUPPRESSMSGBOXES
+
+[Winbatch_uninstall_64]
+$UninstallProgram$ /sp- /silent /norestart /nocancel /SUPPRESSMSGBOXES
+
+[Files_delete]
+del -sf "%SystemDrive%\GAMS"
+
+[LinkFolder_delete_icon]
+set_basefolder common_desktopdirectory
+set_subfolder .
+delete_element "Gams"

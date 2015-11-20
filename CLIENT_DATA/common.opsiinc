@@ -1,0 +1,48 @@
+requiredWinstVersion >= "4.11.4.6"
+SetLogLevel = 7
+
+DefVar $UninstallProgram$
+DefVar $InstallDir$
+DefVar $LogDir$
+DefVar $ProductId$  
+DefVar $MinimumSpace$
+DefVar $ExitCode$
+DefVar $INST_SystemType$
+DefVar $INST_architecture$
+DefVar $WindowsNTVersion$
+DefVar $CustomPostUninstall$
+DefVar $CustomPostInstall$
+DefVar $DesktopIcon$
+DefVar $ProgramIcon$
+DefVar $PathToExe$	
+DefVar $ProductName$
+DefVar $MsiID32$
+DefVar $MsiID64$
+DefVar $Installer32$
+DefVar $Installer64$
+
+Set $INST_SystemType$ = GetSystemType
+Set $WindowsNTVersion$ = GetMsVersionInfo
+
+if ($INST_SystemType$ = "x86 System")
+	Set $InstallDir$ = "%SystemDrive%\GAMS\win32\24.5"
+endif
+
+if ($INST_SystemType$ = "64 Bit System")
+	Set $InstallDir$ = "%SystemDrive%\GAMS\win64\24.5"
+endif
+
+; ----------------------------------------------------------------
+Set $LogDir$				= "%opsiLogDir%"
+Set $ProductId$				= "gams"
+Set $ProductName$			= "Gams"
+Set $MinimumSpace$			= "650 MB"
+Set $Installer32$			= "%Scriptpath%\windows_x86_32.exe"
+Set $Installer64$			= "%Scriptpath%\windows_x64_64.exe"
+Set $UninstallProgram$		= $InstallDir$ + "\unins000.exe"
+Set $PathToExe$				= $InstallDir$ + "\gamside.exe"
+; ----------------------------------------------------------------
+
+
+
+include_append "section_sub_check_exitcode.opsiinc"

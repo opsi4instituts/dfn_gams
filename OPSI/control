@@ -1,0 +1,73 @@
+[Package]
+version: 2
+depends: 
+incremental: False
+
+[Product]
+type: localboot
+id: dfn_gams
+name: General Algebraic Modeling System
+description: General Algebraic Modeling System (GAMS) is a high-level modeling system for mathematical programming and optimization
+advice: 
+version: 24.5.4
+priority: 0
+licenseRequired: False
+productClasses: 
+setupScript: setup3264.opsiscript
+uninstallScript: uninstall3264.opsiscript
+updateScript: 
+alwaysScript: 
+onceScript: 
+customScript: 
+userLoginScript: 
+
+[ProductProperty]
+type: bool
+name: desktopicon
+description: Erstellt Desktop Icon
+default: True
+
+[ProductProperty]
+type: unicode
+name: custom-post-install
+multivalue: False
+editable: True
+description: Define filename for include script in custom directory after installation
+values: ["none", "post-install.opsiinc", "post-install.opsiscript"]
+default: ["none"]
+
+[ProductProperty]
+type: unicode
+name: custom-post-uninstall
+multivalue: False
+editable: True
+description: Define filename for include script in custom directory after uninstallation
+values: ["none", "post-uninstall.opsiinc", "post-uninstall.opsiscript"]
+default: ["none"]
+
+[Changelog]
+blender---wiwi--- (2.76b-1) testing; urgency=low
+
+  * Initial package
+
+ -- Christoph Walenta <opsi@wiwi.kit.edu>  Tue, 18 Nov 2015 17:20:25 +0000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
